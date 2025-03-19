@@ -37,6 +37,43 @@ app.get('/', (req, res) => {
     });
 });
 
+app.post('/add', (req, res) => {
+    const params = {
+        TableName: table,
+        Item: {
+            ...req.body,
+            id: Date.now().toString
+        }
+    };
+
+    docClient.put(params, (err, data) => {
+        if (err) {
+            console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+        } else {
+            console.log("Added item:", JSON.stringify(data, null, 2));
+            res.redirect('/');
+        }
+    });
+});
+
+app.post('/delete/:id', (req, res) => {
+    const params = {
+        TableName: table,
+        Key: {
+            id: req.params.id
+        }
+    };
+
+    docClient.delete(params, (err, data) => {
+        if (err) {
+            console.error("Unable to delete item. Error JSON:", JSON.stringify(err, null, 2));
+        } else {
+            console.log("Delete item:", JSON.stringify(data, null, 2));
+            res.redirect('/');
+        }
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 }); 
