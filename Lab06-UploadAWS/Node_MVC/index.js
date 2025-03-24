@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const multer = require("multer");
+const fileType = require("file-type");
 const app = express();
 const port = 3000;
 
@@ -26,6 +27,17 @@ const uploadMiddleware = multer({
         fileSize: 1024 * 1024 * 1  
     }
 }).single("image");  
+
+// check image
+
+const checkFile = async (file) => {
+    const type = await fileType.fileTypeFromBuffer(file.buffer);
+    console.log("type file: ", type);
+
+    if(!type || !type.mime.startsWith('image/')){
+        console.log("File err");
+    }
+}
 
 
 app.get("/", (req, res) => {
@@ -53,6 +65,8 @@ app.post("/save", uploadMiddleware,async (req, res) => {
     }
     const image = await uploadFile(file);
     console.log("Image: ", image);
+
+    checkFile(file);
 
     const params= {
         TableName: tableName,
