@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const multer = require("multer");
 const app = express();
 const port = 3000;
 
@@ -9,11 +10,23 @@ const {
     s3
 } = require("./helper/aws.helper")
 
+
+const { uploadFile } = require("./helper/file.helper");
+
 //config 
 app.use(express.urlencoded({extended: false}));
 app.use(express.static("./views"))
 app.set('view engine', 'ejs');
 app.set('views', './views');
+
+const storage = multer.memoryStorage();
+const uploadMiddleware = multer({
+    storage,
+    limits: {
+        fileSize: 1024 * 1024 * 1  
+    }
+}).single("image");  
+
 
 app.get("/", (req, res) => {
     docClient.scan({TableName: tableName}, (err, data) => {
@@ -30,15 +43,27 @@ app.get("/", (req, res) => {
     })
 });
 
-app.post("/save", (req, res) => {
+app.post("/save", uploadMiddleware,async (req, res) => {
+    const file = req.file;
+    console.log("file: ", req.file);
+    if(!file){
+        console.log("Not found file !");
+        res.redirect("/");
+        return;
+    }
+    const image = await uploadFile(file);
+    console.log("Image: ", image);
+
     const params= {
         TableName: tableName,
         Item: {
             id: String(Date.now()),
-            ...req.body
+            ...req.body,
+            image: image
         }
     }
     console.log(JSON.stringify(req.body))
+
     docClient.put(params, (err, data) => {
         if(err) {
             console.error(err);
