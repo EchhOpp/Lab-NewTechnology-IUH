@@ -16,7 +16,7 @@
         </div>
         <div class="mb-3">
             <label for="course_type" class="form-label">Loại môn học</label>
-            <input type="text" class="form-control" id="course_type" name="course_type" required>
+            <input type="text" class="form-control" id="type" name="type" required>
         </div>
         <div class="mb-3">
             <label for="semester" class="form-label">Học kỳ</label>
@@ -25,6 +25,10 @@
         <div class="mb-3">
             <label for="department" class="form-label">Khoa</label>
             <input type="text" class="form-control" id="department" name="department" required>
+        </div>
+        <div class="mb-3">
+            <label for="department" class="form-label">Hình ảnh</label>
+            <input type="text" class="form-control" id="image" name="image" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -38,7 +42,7 @@
                 <th>Loại môn học</th>
                 <th>Học kỳ</th>
                 <th>Khoa</th>
-                <th>Sửa</th>
+                <th>Hình ảnh</th>
                 <th>Xóa</th>
             </tr>
         </thead>
@@ -47,10 +51,10 @@
             <tr>
                 <td><%= item.id %></td>
                 <td><%= item.name %></td>
-                <td><%= item.course_type %></td>
+                <td><%= item.type %></td>
                 <td><%= item.semester %></td>
                 <td><%= item.department %></td>
-                <td><button type="button" class="btn btn-primary">Primary</button></td>
+                <td><%= item.image %></td>
                 <td>
                     <form action="/delete/<%= item.id %>" method="POST">
                         <button type="submit" class="btn btn-danger">Delete</button>

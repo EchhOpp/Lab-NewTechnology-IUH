@@ -30,6 +30,60 @@ app.get("/", (req, res) => {
     })
 });
 
+app.post("/save", (req, res) => {
+    const params= {
+        TableName: tableName,
+        Item: {
+            id: String(Date.now()),
+            ...req.body
+        }
+    }
+    console.log(JSON.stringify(req.body))
+    docClient.put(params, (err, data) => {
+        if(err) {
+            console.error(err);
+            return;
+        } else {
+            console.log("Save succeeded: ", JSON.stringify(data, null, 2));
+            res.redirect("/");
+        }
+    })
+});
+
+app.post("/delete/:id", (req, res) => {
+    console.log("detele id: ", req.params.id)
+    const params = {
+        TableName: tableName,
+        KeyConditionExpression: "id = :id",
+        ExpressionAttributeValues: {
+            ":id": req.params.id
+        }
+    };
+
+    docClient.query(params, (err, data) => {
+        if(err){
+            console.error("Error scanning table ", err);
+            return res.redirect("/");
+        } 
+        const paramsDelete = {
+            TableName: tableName,
+            Key: {
+                id: data.Items[0].id,
+                name: data.Items[0].name
+            }
+        }
+        docClient.delete(paramsDelete, (err, data) => {
+            if(err) {
+                console.error(err);
+                return res.redirect("/");
+            } else {
+                console.log("delete succeeded!");
+                return res.redirect("/");
+            }
+        })
+    });
+});
+
 app.listen(port, () => {
     console.log(`Server is running in port ${port}`);
 })

@@ -10,7 +10,7 @@ AWS.config = config;
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3();
-const tableName = "class01"
+const tableName = "table_default"
 
 module.exports = {
     tableName,
