@@ -75,7 +75,7 @@ app.post("/save", uploadMiddleware,async (req, res) => {
             ...req.body,
             image: image
         }
-    }
+    }           
     console.log(JSON.stringify(req.body))
 
     docClient.put(params, (err, data) => {

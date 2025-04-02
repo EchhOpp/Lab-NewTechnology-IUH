@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body class="w-50 mx-auto">
+    
+    
+    <form action="/save" method="POST" enctype="multipart/form-data">
+        <legend>Input</legend>
+    
+        <div class="form-group">
+            <label for="">Mã xe</label>
+            <input type="text" class="form-control" id="maXe" name="maXe" placeholder="Input field">
+        </div>
+    
+        <div class="form-group">
+            <label for="">Tên dòng xe</label>
+            <input type="text" class="form-control" id="tenDongXe" name="tenDongXe" placeholder="Input field">
+        </div>
+        <div class="form-group">
+            <label for="">Loại xe</label>
+            <input type="text" class="form-control" id="loaiXe" name="loaiXe" placeholder="Input field">
+        </div>
+        <div class="form-group">
+            <label for="">Giá xe</label>
+            <input type="text" class="form-control" id="gia" name="gia" placeholder="Input field">
+        </div>
+        <div class="form-group">
+            <label for="">Hình ảnh</label>
+            <input type="file" class="form-control" id="hinhAnh" name="hinhAnh" placeholder="Input field">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    
+    <br>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Mã xe</th>
+                <th>Tên dòng xe</th>
+                <th>Loại xe</th>
+                <th>Giá xe</th>
+                <th>Hình ảnh</th>
+                <th>Xóa</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% items.forEach( item => {%>
+                <tr>
+                    <th><%= item.maXe%></th>
+                    <th><%= item.tenDongXe%></th>
+                    <th><%= item.loaiXe%></th>
+                    <th><%= item.gia%></th>
+                    <th>
+                        <img src="<%= item.hinhAnh%>" alt="" class="h-25 w-25">
+                    </th>
+                    <th>
+                        <form action="/delete/<%= item.maXe%>" method="POST">
+                            <button type="submit" class="btn btn-primary">Xoa</button>
+                        </form>  
+                    </th>
+                </tr>
+            <% });%>
+        </tbody>
+    </table>
+    
+</body>
+</html>
